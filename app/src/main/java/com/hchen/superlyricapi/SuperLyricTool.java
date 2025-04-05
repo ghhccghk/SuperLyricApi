@@ -37,11 +37,6 @@ public class SuperLyricTool {
             return bitmapToBase64(bitmapDrawable.getBitmap());
         } else if (drawable instanceof VectorDrawable vectorDrawable) {
             return bitmapToBase64(makeDrawableToBitmap(vectorDrawable));
-        } else {
-            try {
-                bitmapToBase64(((BitmapDrawable) drawable).getBitmap());
-            } catch (Throwable ignore) {
-            }
         }
         return "";
     }

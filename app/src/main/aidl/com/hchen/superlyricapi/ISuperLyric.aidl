@@ -12,7 +12,9 @@ interface ISuperLyric {
     //void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat,
     //        double aDouble, String aString);
 
-    oneway void onStop();
+    // 代表歌曲被暂停
+    void onStop();
 
-    oneway void onSuperLyric(in SuperLyricData data);
+    // 当歌曲发生变化时调用
+    void onSuperLyric(in SuperLyricData data);
 }
