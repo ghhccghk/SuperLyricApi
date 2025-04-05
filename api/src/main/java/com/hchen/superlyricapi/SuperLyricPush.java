@@ -18,8 +18,25 @@
  */
 package com.hchen.superlyricapi;
 
-public abstract class SuperLyricPush {
-    abstract void onStop();
+import androidx.annotation.NonNull;
 
-    abstract void onSuperLyric(SuperLyricData data);
+/**
+ * 供音乐软件使用的 API
+ *
+ * @author 焕晨HChen
+ */
+public class SuperLyricPush {
+    /**
+     * 歌曲暂停
+     */
+    void onStop() {
+    }
+
+    /**
+     * 歌曲数据更改
+     * <p>
+     * 可以发送歌词，参数等数据
+     */
+    void onSuperLyric(@NonNull SuperLyricData data) {
+    }
 }

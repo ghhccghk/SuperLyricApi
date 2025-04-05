@@ -20,6 +20,11 @@ package com.hchen.superlyricapi;
 
 import android.os.Parcelable;
 
+/**
+ * 自定义数据
+ *
+ * @author 焕晨HChen
+ */
 public abstract class SuperLyricExtra implements Parcelable {
     public SuperLyricExtra() {
     }

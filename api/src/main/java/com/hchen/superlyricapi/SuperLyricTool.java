@@ -31,14 +31,32 @@ import android.graphics.drawable.VectorDrawable;
 import android.os.Bundle;
 import android.util.Base64;
 
+import androidx.annotation.NonNull;
+
 import java.io.ByteArrayOutputStream;
 
+/**
+ * 工具
+ *
+ * @author 焕晨HChen
+ */
 public class SuperLyricTool {
+    /**
+     * API 是否成功启用，供音乐软件检查使用
+     */
     public static boolean isEnabled = false;
+    /**
+     * 当前 API 版本
+     */
     public static int apiVersion = BuildConfig.API_VERSION;
 
-    public static Bitmap base64ToBitmap(String base64) {
+    /**
+     * Base64 转 Bitmap
+     */
+    public static Bitmap base64ToBitmap(@NonNull String base64) {
         try {
+            if (base64.isEmpty()) return null;
+
             byte[] bytes = Base64.decode(base64, Base64.DEFAULT);
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         } catch (Throwable e) {
@@ -46,7 +64,10 @@ public class SuperLyricTool {
         }
     }
 
-    public static String drawableToBase64(Drawable drawable) {
+    /**
+     * Drawable 转 Base64
+     */
+    public static String drawableToBase64(@NonNull Drawable drawable) {
         if (drawable instanceof AdaptiveIconDrawable adaptiveIconDrawable) {
             return adaptiveIconDrawableBase64(adaptiveIconDrawable);
         }
@@ -59,7 +80,10 @@ public class SuperLyricTool {
         return "";
     }
 
-    public static String bitmapToBase64(Bitmap bitmap) {
+    /**
+     * Bitmap 转 Base64
+     */
+    public static String bitmapToBase64(@NonNull Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
         byte[] bytes = stream.toByteArray();
@@ -88,7 +112,10 @@ public class SuperLyricTool {
         return bitmap;
     }
 
-    public static void registerSuperLyric(Context context, ISuperLyric.Stub superLyric) {
+    /**
+     * 注册 SuperLyric 回调
+     */
+    public static void registerSuperLyric(@NonNull Context context, @NonNull ISuperLyric.Stub superLyric) {
         Intent intent = new Intent("Super_Lyric");
         Bundle bundle = new Bundle();
         bundle.putBinder("super_lyric_binder", superLyric);

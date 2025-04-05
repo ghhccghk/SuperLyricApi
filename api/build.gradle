@@ -1,0 +1,94 @@
+plugins {
+    alias(libs.plugins.android.library)
+    id 'maven-publish'
+}
+
+def defVersionName = '0.4'
+def defVersionCode = 4
+
+android {
+    namespace 'com.hchen.superlyricapi'
+    compileSdk 35
+
+    defaultConfig {
+        minSdk 31
+        targetSdk 35
+        versionCode defVersionCode
+        versionName defVersionName
+
+        aarMetadata {
+            minCompileSdk = 31
+        }
+
+        buildConfigField("int", "API_VERSION", "$defVersionCode")
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
+    }
+
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+            withJavadocJar()
+        }
+    }
+
+    buildFeatures {
+        buildConfig true
+        aidl true
+    }
+
+    tasks.register("RemoveSuperLyricData") {
+        doLast {
+            def buildDir = "${project.buildDir}/generated/aidl_source_output_dir"
+            def classFiles = fileTree(dir: buildDir, includes: ['**/SuperLyricData.java'])
+
+            classFiles.each { file ->
+                if (file.exists()) {
+                    file.delete()
+                    println("Remove File: ${file}")
+                }
+            }
+        }
+    }
+
+    tasks.configureEach { task ->
+        def name = task.name
+        if (name.contains("JavaWithJavac") && !name.contains("Test")) {
+            task.finalizedBy(RemoveSuperLyricData)
+        }
+    }
+}
+
+tasks.register('androidSourcesJar', Jar) {
+    from android.sourceSets.main.java.srcDirs
+}
+
+dependencies {
+    implementation libs.annotation
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            release(MavenPublication) {
+                from components.release
+                groupId = 'com.github.HChenX'
+                artifactId = 'SuperLyricApi'
+                version = defVersionName
+
+                artifact androidSourcesJar
+            }
+        }
+    }
+}

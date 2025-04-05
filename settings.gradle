@@ -21,3 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "SuperLyricApi"
 include ':app'
+include ':api'

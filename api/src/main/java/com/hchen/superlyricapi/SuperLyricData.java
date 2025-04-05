@@ -26,12 +26,43 @@ import android.media.MediaMetadata;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+/**
+ * 歌词数据
+ *
+ * @author 焕晨HChen
+ */
 public class SuperLyricData implements Parcelable {
-    public String lyric = "";
-    public String packageName = "";
-    public String base64Icon = "";
+    /**
+     * 歌词
+     */
+    @Nullable
+    public String lyric = null;
+    /**
+     * 音乐软件的包名
+     */
+    @Nullable
+    public String packageName = null;
+    /**
+     * 自定义的图标
+     */
+    @Nullable
+    public String base64Icon = null;
+    /**
+     * 每句歌词的持续时间 (毫秒)
+     */
     public int delay = 0;
+    /**
+     * 当前歌曲的 MediaMetadata 数据
+     */
+    @Nullable
     public MediaMetadata mediaMetadata;
+    /**
+     * 可以自定义的附加数据
+     */
+    @Nullable
     public SuperLyricExtra extra;
 
     public SuperLyricData() {
@@ -46,16 +77,30 @@ public class SuperLyricData implements Parcelable {
         extra = in.readParcelable(SuperLyricExtra.class.getClassLoader());
     }
 
+    /**
+     * 获取歌曲的标题
+     * <br/>
+     * 请注意，可能有些软件会拿此参数传递歌词
+     */
+    @NonNull
     public String getTitle() {
         if (mediaMetadata == null) return "Unknown";
         return mediaMetadata.getString(METADATA_KEY_TITLE);
     }
 
+    /**
+     * 获取歌曲的艺术家
+     */
+    @NonNull
     public String getArtist() {
         if (mediaMetadata == null) return "Unknown";
         return mediaMetadata.getString(METADATA_KEY_ARTIST);
     }
 
+    /**
+     * 获取歌曲的专辑
+     */
+    @NonNull
     public String getAlbum() {
         if (mediaMetadata == null) return "Unknown";
         return mediaMetadata.getString(METADATA_KEY_ALBUM);
