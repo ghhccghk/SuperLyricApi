@@ -12,7 +12,7 @@ interface ISuperLyric {
     //void basicTypes(int anInt, long aLong, boolean aBoolean, float aFloat,
     //        double aDouble, String aString);
 
-    void onStop();
+    oneway void onStop();
 
-    void onSuperLyric(in SuperLyricData data);
+    oneway void onSuperLyric(in SuperLyricData data);
 }

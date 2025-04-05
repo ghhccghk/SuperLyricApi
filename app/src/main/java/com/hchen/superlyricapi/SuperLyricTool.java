@@ -1,5 +1,7 @@
 package com.hchen.superlyricapi;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -8,6 +10,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.VectorDrawable;
+import android.os.Bundle;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
@@ -70,5 +73,13 @@ public class SuperLyricTool {
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    public static void registerSuperLyric(Context context, ISuperLyric.Stub superLyric) {
+        Intent intent = new Intent("Super_Lyric");
+        Bundle bundle = new Bundle();
+        bundle.putBinder("super_lyric_binder", superLyric);
+        intent.putExtras(bundle);
+        context.sendBroadcast(intent);
     }
 }
