@@ -44,6 +44,27 @@ android {
         buildConfig true
         aidl true
     }
+
+    tasks.register("RemoveSuperLyricData") {
+        doLast {
+            def buildDir = "${project.buildDir}/generated/aidl_source_output_dir"
+            def classFiles = fileTree(dir: buildDir, includes: ['**/SuperLyricData.java'])
+
+            classFiles.each { file ->
+                if (file.exists()) {
+                    file.delete()
+                    println("Remove File: ${file}")
+                }
+            }
+        }
+    }
+
+    tasks.configureEach { task ->
+        def name = task.name
+        if (name.contains("JavaWithJavac") && !name.contains("Test")) {
+            task.finalizedBy(RemoveSuperLyricData)
+        }
+    }
 }
 
 tasks.register('androidSourcesJar', Jar) {
