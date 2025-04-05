@@ -19,5 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Super Lyric Api"
+rootProject.name = "SuperLyricApi"
 include ':app'
