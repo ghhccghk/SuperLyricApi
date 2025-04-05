@@ -9,12 +9,15 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 public class SuperLyricData implements Parcelable {
-    public String lyric;
-    public String packageName;
-    public String base64Icon;
+    public String lyric = "";
+    public String packageName = "";
+    public String base64Icon = "";
     public int delay = 0;
     public MediaMetadata mediaMetadata;
     public SuperLyricExtra extra;
+
+    public SuperLyricData() {
+    }
 
     protected SuperLyricData(Parcel in) {
         lyric = in.readString();

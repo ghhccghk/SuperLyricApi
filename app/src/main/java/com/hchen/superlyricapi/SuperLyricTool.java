@@ -13,6 +13,9 @@ import android.util.Base64;
 import java.io.ByteArrayOutputStream;
 
 public class SuperLyricTool {
+    public static boolean isEnabled = false;
+    public static int apiVersion = BuildConfig.API_VERSION;
+
     public static Bitmap base64ToBitmap(String base64) {
         try {
             byte[] bytes = Base64.decode(base64, Base64.DEFAULT);
