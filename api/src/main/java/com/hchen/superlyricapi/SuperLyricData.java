@@ -118,6 +118,10 @@ public class SuperLyricData implements Parcelable {
         return parcel;
     }
 
+    public SuperLyricData unmarshall(Parcel parcel) {
+        return new SuperLyricData(parcel);
+    }
+
     @NonNull
     @Override
     public String toString() {
