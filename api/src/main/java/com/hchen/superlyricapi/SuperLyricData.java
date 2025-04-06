@@ -29,6 +29,8 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.Objects;
+
 /**
  * 歌词数据
  *
@@ -104,6 +106,44 @@ public class SuperLyricData implements Parcelable {
     public String getAlbum() {
         if (mediaMetadata == null) return "Unknown";
         return mediaMetadata.getString(METADATA_KEY_ALBUM);
+    }
+
+    /**
+     * 方便手动封装包裹
+     */
+    public Parcel marshall() {
+        Parcel parcel = Parcel.obtain();
+        writeToParcel(parcel, 0);
+        parcel.setDataPosition(0);
+        return parcel;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "SuperLyricData{" +
+            "lyric='" + lyric + '\'' +
+            ", packageName='" + packageName + '\'' +
+            ", base64Icon='" + base64Icon + '\'' +
+            ", delay=" + delay +
+            ", mediaMetadata=" + mediaMetadata +
+            ", extra=" + extra +
+            '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof SuperLyricData data)) return false;
+        return delay == data.delay && Objects.equals(lyric, data.lyric) &&
+            Objects.equals(packageName, data.packageName) &&
+            Objects.equals(base64Icon, data.base64Icon) &&
+            Objects.equals(mediaMetadata, data.mediaMetadata)
+            && Objects.equals(extra, data.extra);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(lyric, packageName, base64Icon, delay, mediaMetadata, extra);
     }
 
     @Override
