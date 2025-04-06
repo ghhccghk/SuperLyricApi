@@ -114,11 +114,14 @@ public class SuperLyricData implements Parcelable {
     public Parcel marshall() {
         Parcel parcel = Parcel.obtain();
         writeToParcel(parcel, 0);
-        parcel.setDataPosition(0);
         return parcel;
     }
 
+    /**
+     * 解包封装并实例化。
+     */
     public SuperLyricData unmarshall(Parcel parcel) {
+        parcel.setDataPosition(0);
         return new SuperLyricData(parcel);
     }
 
