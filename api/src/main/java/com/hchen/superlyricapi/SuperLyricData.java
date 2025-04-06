@@ -118,7 +118,7 @@ public class SuperLyricData implements Parcelable {
     }
 
     /**
-     * 解包封装并实例化。
+     * 解包封装并实例化
      */
     public SuperLyricData unmarshall(Parcel parcel) {
         parcel.setDataPosition(0);
