@@ -134,4 +134,38 @@ public class SuperLyricTool {
         intent.putExtras(bundle);
         context.sendBroadcast(intent);
     }
+
+    /**
+     * 取消注册 SuperLyric 回调
+     */
+    public static void unregisterSuperLyric(@NonNull Context context, @NonNull ISuperLyric.Stub superLyric) {
+        unregisterSuperLyric(context, false, superLyric);
+    }
+
+    /**
+     * 取消注册 SuperLyric 回调
+     *
+     * @param context       上下文信息
+     * @param unSelfControl 是否取消由自己控制播放状态
+     * @param superLyric    回调
+     */
+    public static void unregisterSuperLyric(@NonNull Context context, boolean unSelfControl, @NonNull ISuperLyric.Stub superLyric) {
+        Intent intent = new Intent("Super_Lyric");
+        Bundle bundle = new Bundle();
+        bundle.getBoolean("super_lyric_un_self_control", unSelfControl);
+        bundle.putBinder("super_lyric_un_binder", superLyric);
+        intent.putExtras(bundle);
+        context.sendBroadcast(intent);
+    }
+
+    /**
+     * 取消自我控制播放状态，将音乐的暂停权交给系统
+     */
+    public static void unregisterSelfControl(@NonNull Context context) {
+        Intent intent = new Intent("Super_Lyric");
+        Bundle bundle = new Bundle();
+        bundle.getBoolean("super_lyric_un_self_control", true);
+        intent.putExtras(bundle);
+        context.sendBroadcast(intent);
+    }
 }
