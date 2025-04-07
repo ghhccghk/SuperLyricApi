@@ -28,8 +28,10 @@ import androidx.annotation.NonNull;
 public class SuperLyricPush {
     /**
      * 歌曲暂停
+     * <p>
+     * 主要用于传递暂停播放的应用的包名，当然你也可以传更多参数
      */
-    void onStop() {
+    void onStop(SuperLyricData data) {
     }
 
     /**
