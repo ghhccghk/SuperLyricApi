@@ -3,8 +3,8 @@ plugins {
     id 'maven-publish'
 }
 
-def defVersionName = '1.1'
-def defVersionCode = 11
+def defVersionName = '1.2'
+def defVersionCode = 12
 
 android {
     namespace 'com.hchen.superlyricapi'
@@ -17,7 +17,7 @@ android {
         versionName defVersionName
 
         aarMetadata {
-            minCompileSdk = 31
+            minCompileSdk = 26
         }
 
         buildConfigField("int", "API_VERSION", "$defVersionCode")

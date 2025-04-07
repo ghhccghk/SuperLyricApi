@@ -23,6 +23,7 @@ import static android.media.MediaMetadata.METADATA_KEY_ARTIST;
 import static android.media.MediaMetadata.METADATA_KEY_TITLE;
 
 import android.media.MediaMetadata;
+import android.media.session.PlaybackState;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -30,6 +31,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 歌词数据
@@ -44,9 +46,11 @@ public class SuperLyricData implements Parcelable {
     private String lyric = null;
     /**
      * 音乐软件的包名
+     * <p>
+     * 非常建议您设置包名，这是判断当前播放应用的唯一途径
      */
-    @Nullable
-    private String packageName = null;
+    @NonNull
+    private String packageName = "";
     /**
      * 自定义的图标
      */
@@ -62,6 +66,13 @@ public class SuperLyricData implements Parcelable {
     @Nullable
     private MediaMetadata mediaMetadata;
     /**
+     * 当前的播放状态
+     * <p>
+     * 一般来说可以放在 stop 动作中设置
+     */
+    @Nullable
+    private PlaybackState playbackState;
+    /**
      * 可以自定义的附加数据
      */
     @Nullable
@@ -72,11 +83,25 @@ public class SuperLyricData implements Parcelable {
 
     protected SuperLyricData(Parcel in) {
         lyric = in.readString();
-        packageName = in.readString();
+        packageName = Optional.ofNullable(
+            in.readString()
+        ).orElse("");
         base64Icon = in.readString();
         delay = in.readInt();
         mediaMetadata = in.readParcelable(MediaMetadata.class.getClassLoader());
+        playbackState = in.readParcelable(PlaybackState.class.getClassLoader());
         extra = in.readParcelable(SuperLyricExtra.class.getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(lyric);
+        dest.writeString(packageName);
+        dest.writeString(base64Icon);
+        dest.writeInt(delay);
+        dest.writeParcelable(mediaMetadata, flags);
+        dest.writeParcelable(playbackState, flags);
+        dest.writeParcelable(extra, flags);
     }
 
     /**
@@ -105,7 +130,7 @@ public class SuperLyricData implements Parcelable {
         return this;
     }
 
-    public SuperLyricData setPackageName(@Nullable String packageName) {
+    public SuperLyricData setPackageName(@NonNull String packageName) {
         this.packageName = packageName;
         return this;
     }
@@ -125,6 +150,11 @@ public class SuperLyricData implements Parcelable {
         return this;
     }
 
+    public SuperLyricData setPlaybackState(@Nullable PlaybackState playbackState) {
+        this.playbackState = playbackState;
+        return this;
+    }
+
     public SuperLyricData setExtra(@Nullable SuperLyricExtra extra) {
         this.extra = extra;
         return this;
@@ -135,7 +165,7 @@ public class SuperLyricData implements Parcelable {
         return lyric;
     }
 
-    @Nullable
+    @NonNull
     public String getPackageName() {
         return packageName;
     }
@@ -152,6 +182,11 @@ public class SuperLyricData implements Parcelable {
     @Nullable
     public MediaMetadata getMediaMetadata() {
         return mediaMetadata;
+    }
+
+    @Nullable
+    public PlaybackState getPlaybackState() {
+        return playbackState;
     }
 
     @Nullable
@@ -214,6 +249,7 @@ public class SuperLyricData implements Parcelable {
             ", base64Icon='" + base64Icon + '\'' +
             ", delay=" + delay +
             ", mediaMetadata=" + mediaMetadata +
+            ", playbackState=" + playbackState +
             ", extra=" + extra +
             '}';
     }
@@ -224,23 +260,14 @@ public class SuperLyricData implements Parcelable {
         return delay == data.delay && Objects.equals(lyric, data.lyric) &&
             Objects.equals(packageName, data.packageName) &&
             Objects.equals(base64Icon, data.base64Icon) &&
-            Objects.equals(mediaMetadata, data.mediaMetadata)
-            && Objects.equals(extra, data.extra);
+            Objects.equals(mediaMetadata, data.mediaMetadata) &&
+            Objects.equals(playbackState, data.playbackState) &&
+            Objects.equals(extra, data.extra);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lyric, packageName, base64Icon, delay, mediaMetadata, extra);
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(lyric);
-        dest.writeString(packageName);
-        dest.writeString(base64Icon);
-        dest.writeInt(delay);
-        dest.writeParcelable(mediaMetadata, flags);
-        dest.writeParcelable(extra, flags);
+        return Objects.hash(lyric, packageName, base64Icon, delay, mediaMetadata, playbackState, extra);
     }
 
     @Override
