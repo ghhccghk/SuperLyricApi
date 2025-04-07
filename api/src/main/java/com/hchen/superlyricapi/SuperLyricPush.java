@@ -31,7 +31,7 @@ public class SuperLyricPush {
      * <p>
      * 主要用于传递暂停播放的应用的包名，当然你也可以传更多参数
      */
-    void onStop(SuperLyricData data) {
+    void onStop(@NonNull SuperLyricData data) {
     }
 
     /**

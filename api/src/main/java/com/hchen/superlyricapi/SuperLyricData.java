@@ -41,31 +41,31 @@ public class SuperLyricData implements Parcelable {
      * 歌词
      */
     @Nullable
-    public String lyric = null;
+    private String lyric = null;
     /**
      * 音乐软件的包名
      */
     @Nullable
-    public String packageName = null;
+    private String packageName = null;
     /**
      * 自定义的图标
      */
     @Nullable
-    public String base64Icon = null;
+    private String base64Icon = null;
     /**
      * 每句歌词的持续时间 (毫秒)
      */
-    public int delay = 0;
+    private int delay = 0;
     /**
      * 当前歌曲的 MediaMetadata 数据
      */
     @Nullable
-    public MediaMetadata mediaMetadata;
+    private MediaMetadata mediaMetadata;
     /**
      * 可以自定义的附加数据
      */
     @Nullable
-    public SuperLyricExtra extra;
+    private SuperLyricExtra extra;
 
     public SuperLyricData() {
     }
@@ -98,6 +98,65 @@ public class SuperLyricData implements Parcelable {
      */
     public boolean isExistBase64Icon() {
         return base64Icon != null;
+    }
+
+    public SuperLyricData setLyric(@Nullable String lyric) {
+        this.lyric = lyric;
+        return this;
+    }
+
+    public SuperLyricData setPackageName(@Nullable String packageName) {
+        this.packageName = packageName;
+        return this;
+    }
+
+    public SuperLyricData setBase64Icon(@Nullable String base64Icon) {
+        this.base64Icon = base64Icon;
+        return this;
+    }
+
+    public SuperLyricData setDelay(int delay) {
+        this.delay = delay;
+        return this;
+    }
+
+    public SuperLyricData setMediaMetadata(@Nullable MediaMetadata mediaMetadata) {
+        this.mediaMetadata = mediaMetadata;
+        return this;
+    }
+
+    public SuperLyricData setExtra(@Nullable SuperLyricExtra extra) {
+        this.extra = extra;
+        return this;
+    }
+
+    @Nullable
+    public String getLyric() {
+        return lyric;
+    }
+
+    @Nullable
+    public String getPackageName() {
+        return packageName;
+    }
+
+    @Nullable
+    public String getBase64Icon() {
+        return base64Icon;
+    }
+
+    public int getDelay() {
+        return delay;
+    }
+
+    @Nullable
+    public MediaMetadata getMediaMetadata() {
+        return mediaMetadata;
+    }
+
+    @Nullable
+    public SuperLyricExtra getExtra() {
+        return extra;
     }
 
     /**
