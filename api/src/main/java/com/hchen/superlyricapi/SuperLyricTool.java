@@ -116,8 +116,20 @@ public class SuperLyricTool {
      * 注册 SuperLyric 回调
      */
     public static void registerSuperLyric(@NonNull Context context, @NonNull ISuperLyric.Stub superLyric) {
+        registerSuperLyric(context, false, superLyric);
+    }
+
+    /**
+     * 注册 SuperLyric 回调
+     *
+     * @param context     上下文信息
+     * @param selfControl 是否自己控制歌曲是否暂停和发布 MediaMetadata 信息，否则由系统控制
+     * @param superLyric  回调
+     */
+    public static void registerSuperLyric(@NonNull Context context, boolean selfControl, @NonNull ISuperLyric.Stub superLyric) {
         Intent intent = new Intent("Super_Lyric");
         Bundle bundle = new Bundle();
+        bundle.putBoolean("super_lyric_self_control", selfControl);
         bundle.putBinder("super_lyric_binder", superLyric);
         intent.putExtras(bundle);
         context.sendBroadcast(intent);

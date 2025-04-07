@@ -80,7 +80,28 @@ public class SuperLyricData implements Parcelable {
     }
 
     /**
-     * 获取歌曲的标题
+     * 是否存在 MediaMetadata 信息
+     */
+    public boolean isExistMediaMetadata() {
+        return mediaMetadata != null;
+    }
+
+    /**
+     * 是否存在 SuperLyricExtra 数据
+     */
+    public boolean isExistSuperLyricExtra() {
+        return extra != null;
+    }
+
+    /**
+     * 是否存在 base64Icon 数据
+     */
+    public boolean isExistBase64Icon() {
+        return base64Icon != null;
+    }
+
+    /**
+     * 获取歌曲的标题，数据来自 MediaMetadata
      * <br/>
      * 请注意，可能有些软件会拿此参数传递歌词
      */
@@ -91,7 +112,7 @@ public class SuperLyricData implements Parcelable {
     }
 
     /**
-     * 获取歌曲的艺术家
+     * 获取歌曲的艺术家，数据来自 MediaMetadata
      */
     @NonNull
     public String getArtist() {
@@ -100,7 +121,7 @@ public class SuperLyricData implements Parcelable {
     }
 
     /**
-     * 获取歌曲的专辑
+     * 获取歌曲的专辑，数据来自 MediaMetadata
      */
     @NonNull
     public String getAlbum() {
