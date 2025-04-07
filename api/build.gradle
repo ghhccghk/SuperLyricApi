@@ -3,15 +3,15 @@ plugins {
     id 'maven-publish'
 }
 
-def defVersionName = '1.0'
-def defVersionCode = 10
+def defVersionName = '1.1'
+def defVersionCode = 11
 
 android {
     namespace 'com.hchen.superlyricapi'
     compileSdk 35
 
     defaultConfig {
-        minSdk 31
+        minSdk 26
         targetSdk 35
         versionCode defVersionCode
         versionName defVersionName
