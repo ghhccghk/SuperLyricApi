@@ -24,6 +24,7 @@ import static android.media.MediaMetadata.METADATA_KEY_TITLE;
 
 import android.media.MediaMetadata;
 import android.media.session.PlaybackState;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -42,8 +43,8 @@ public class SuperLyricData implements Parcelable {
     /**
      * 歌词
      */
-    @Nullable
-    private String lyric = null;
+    @NonNull
+    private String lyric = "";
     /**
      * 音乐软件的包名
      * <p>
@@ -54,8 +55,8 @@ public class SuperLyricData implements Parcelable {
     /**
      * 自定义的图标
      */
-    @Nullable
-    private String base64Icon = null;
+    @NonNull
+    private String base64Icon = "";
     /**
      * 每句歌词的持续时间 (毫秒)
      */
@@ -76,21 +77,19 @@ public class SuperLyricData implements Parcelable {
      * 可以自定义的附加数据
      */
     @Nullable
-    private SuperLyricExtra extra;
+    private Bundle extra;
 
     public SuperLyricData() {
     }
 
     protected SuperLyricData(Parcel in) {
-        lyric = in.readString();
-        packageName = Optional.ofNullable(
-            in.readString()
-        ).orElse("");
-        base64Icon = in.readString();
+        lyric = Optional.ofNullable(in.readString()).orElse("");
+        packageName = Optional.ofNullable(in.readString()).orElse("");
+        base64Icon = Optional.ofNullable(in.readString()).orElse("");
         delay = in.readInt();
         mediaMetadata = in.readParcelable(MediaMetadata.class.getClassLoader());
         playbackState = in.readParcelable(PlaybackState.class.getClassLoader());
-        extra = in.readParcelable(SuperLyricExtra.class.getClassLoader());
+        extra = in.readBundle(getClass().getClassLoader());
     }
 
     @Override
@@ -101,7 +100,14 @@ public class SuperLyricData implements Parcelable {
         dest.writeInt(delay);
         dest.writeParcelable(mediaMetadata, flags);
         dest.writeParcelable(playbackState, flags);
-        dest.writeParcelable(extra, flags);
+        dest.writeBundle(extra);
+    }
+
+    /**
+     * 是否存在 base64Icon 数据
+     */
+    public boolean isExistBase64Icon() {
+        return !base64Icon.isEmpty();
     }
 
     /**
@@ -112,20 +118,13 @@ public class SuperLyricData implements Parcelable {
     }
 
     /**
-     * 是否存在 SuperLyricExtra 数据
+     * 是否存在附加数据
      */
-    public boolean isExistSuperLyricExtra() {
+    public boolean isExistExtra() {
         return extra != null;
     }
 
-    /**
-     * 是否存在 base64Icon 数据
-     */
-    public boolean isExistBase64Icon() {
-        return base64Icon != null;
-    }
-
-    public SuperLyricData setLyric(@Nullable String lyric) {
+    public SuperLyricData setLyric(@NonNull String lyric) {
         this.lyric = lyric;
         return this;
     }
@@ -135,7 +134,7 @@ public class SuperLyricData implements Parcelable {
         return this;
     }
 
-    public SuperLyricData setBase64Icon(@Nullable String base64Icon) {
+    public SuperLyricData setBase64Icon(@NonNull String base64Icon) {
         this.base64Icon = base64Icon;
         return this;
     }
@@ -155,12 +154,12 @@ public class SuperLyricData implements Parcelable {
         return this;
     }
 
-    public SuperLyricData setExtra(@Nullable SuperLyricExtra extra) {
+    public SuperLyricData setExtra(@Nullable Bundle extra) {
         this.extra = extra;
         return this;
     }
 
-    @Nullable
+    @NonNull
     public String getLyric() {
         return lyric;
     }
@@ -170,7 +169,7 @@ public class SuperLyricData implements Parcelable {
         return packageName;
     }
 
-    @Nullable
+    @NonNull
     public String getBase64Icon() {
         return base64Icon;
     }
@@ -190,7 +189,7 @@ public class SuperLyricData implements Parcelable {
     }
 
     @Nullable
-    public SuperLyricExtra getExtra() {
+    public Bundle getExtra() {
         return extra;
     }
 
@@ -202,7 +201,10 @@ public class SuperLyricData implements Parcelable {
     @NonNull
     public String getTitle() {
         if (mediaMetadata == null) return "Unknown";
-        return mediaMetadata.getString(METADATA_KEY_TITLE);
+
+        return Optional.ofNullable(
+            mediaMetadata.getString(METADATA_KEY_TITLE)
+        ).orElse("Unknown");
     }
 
     /**
@@ -211,7 +213,10 @@ public class SuperLyricData implements Parcelable {
     @NonNull
     public String getArtist() {
         if (mediaMetadata == null) return "Unknown";
-        return mediaMetadata.getString(METADATA_KEY_ARTIST);
+
+        return Optional.ofNullable(
+            mediaMetadata.getString(METADATA_KEY_ARTIST)
+        ).orElse("Unknown");
     }
 
     /**
@@ -220,7 +225,10 @@ public class SuperLyricData implements Parcelable {
     @NonNull
     public String getAlbum() {
         if (mediaMetadata == null) return "Unknown";
-        return mediaMetadata.getString(METADATA_KEY_ALBUM);
+
+        return Optional.ofNullable(
+            mediaMetadata.getString(METADATA_KEY_ALBUM)
+        ).orElse("Unknown");
     }
 
     /**
@@ -259,7 +267,8 @@ public class SuperLyricData implements Parcelable {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof SuperLyricData data)) return false;
-        return delay == data.delay && Objects.equals(lyric, data.lyric) &&
+        return delay == data.delay &&
+            Objects.equals(lyric, data.lyric) &&
             Objects.equals(packageName, data.packageName) &&
             Objects.equals(base64Icon, data.base64Icon) &&
             Objects.equals(mediaMetadata, data.mediaMetadata) &&

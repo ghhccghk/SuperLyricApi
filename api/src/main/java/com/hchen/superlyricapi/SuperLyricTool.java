@@ -41,6 +41,9 @@ import java.io.ByteArrayOutputStream;
  * @author 焕晨HChen
  */
 public class SuperLyricTool {
+    private SuperLyricTool() {
+    }
+
     /**
      * API 是否成功启用，供音乐软件检查使用
      */
