@@ -1,13 +1,13 @@
 <div align="center">
 <h1>SuperLyricApi</h1>
 
-![stars](https://img.shields.io/github/stars/HChenX/AppRetentionHook?style=flat)
-![downloads](https://img.shields.io/github/downloads/HChenX/AppRetentionHook/total)
-![Github repo size](https://img.shields.io/github/repo-size/HChenX/AppRetentionHook)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/HChenX/AppRetentionHook)](https://github.com/HChenX/AppRetentionHook/releases)
-[![GitHub Release Date](https://img.shields.io/github/release-date/HChenX/AppRetentionHook)](https://github.com/HChenX/AppRetentionHook/releases)
-![last commit](https://img.shields.io/github/last-commit/HChenX/AppRetentionHook?style=flat)
+![stars](https://img.shields.io/github/stars/HChenX/SuperLyricApi?style=flat)
+![Github repo size](https://img.shields.io/github/repo-size/HChenX/SuperLyricApi)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/HChenX/SuperLyricApi)](https://github.com/HChenX/SuperLyricApi/releases)
+[![GitHub Release Date](https://img.shields.io/github/release-date/HChenX/SuperLyricApi)](https://github.com/HChenX/SuperLyricApi/releases)
+![last commit](https://img.shields.io/github/last-commit/HChenX/SuperLyricApi?style=flat)
 ![language](https://img.shields.io/badge/language-java-purple)
+![language](https://img.shields.io/badge/language-aidl-purple)
 
 <p><b><a href="README-en.md">English</a> | <a href="README.md">简体中文</a></b></p>
 <p>Super Lyric Api</p>
