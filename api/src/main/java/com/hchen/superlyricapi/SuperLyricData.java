@@ -226,6 +226,7 @@ public class SuperLyricData implements Parcelable {
     /**
      * 方便手动封装包裹
      */
+    @NonNull
     public Parcel marshall() {
         Parcel parcel = Parcel.obtain();
         writeToParcel(parcel, 0);
@@ -235,7 +236,8 @@ public class SuperLyricData implements Parcelable {
     /**
      * 解包封装并实例化
      */
-    public static SuperLyricData unmarshall(Parcel parcel) {
+    @NonNull
+    public static SuperLyricData unmarshall(@NonNull Parcel parcel) {
         parcel.setDataPosition(0);
         return new SuperLyricData(parcel);
     }

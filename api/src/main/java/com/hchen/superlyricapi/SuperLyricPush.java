@@ -26,12 +26,16 @@ import androidx.annotation.NonNull;
  * @author 焕晨HChen
  */
 public class SuperLyricPush {
+
+    private SuperLyricPush() {
+    }
+
     /**
      * 歌曲暂停
      * <p>
      * 主要用于传递暂停播放的应用的包名，当然你也可以传更多参数
      */
-    void onStop(@NonNull SuperLyricData data) {
+    public static void onStop(@NonNull SuperLyricData data) {
     }
 
     /**
@@ -39,6 +43,6 @@ public class SuperLyricPush {
      * <p>
      * 可以发送歌词，参数等数据
      */
-    void onSuperLyric(@NonNull SuperLyricData data) {
+    public static void onSuperLyric(@NonNull SuperLyricData data) {
     }
 }
