@@ -36,7 +36,7 @@ dependencyResolutionManagement {
 }
 
 dependencies {
-    implementation 'com.github.HChenX:SuperLyricApi:1.3' // 引入依赖
+    implementation 'com.github.HChenX:SuperLyricApi:1.4' // 引入依赖
 }
 ```
 
@@ -102,7 +102,7 @@ public class Test {
                 .setPackageName() // 设置本软件包名
                 .setMediaMetadata() // 设置歌曲数据
                 .setDelay() // 设置当前歌词持续时间
-                .setExtra(new TestExtra()) // 设置其他附加数据
+                .setExtra(new Bundle()) // 设置其他附加数据
                 .setPlaybackState() // 设置播放状态
         ); // 发送歌词
 
@@ -114,39 +114,6 @@ public class Test {
         ); // 状态暂停
 
         // 其他 API 请参考源码注释
-    }
-
-    public static class TestExtra extends SuperLyricExtra {
-        public String test;
-
-        public TestExtra() {
-        }
-
-        protected TestExtra(Parcel in) {
-            test = in.readString();
-        }
-
-        @Override
-        public void writeToParcel(Parcel dest, int flags) {
-            dest.writeString(test);
-        }
-
-        @Override
-        public int describeContents() {
-            return 0;
-        }
-
-        public static final Creator<TestExtra> CREATOR = new Creator<TestExtra>() {
-            @Override
-            public TestExtra createFromParcel(Parcel in) {
-                return new TestExtra(in);
-            }
-
-            @Override
-            public TestExtra[] newArray(int size) {
-                return new TestExtra[size];
-            }
-        };
     }
 }
 ```
