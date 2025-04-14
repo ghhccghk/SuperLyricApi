@@ -85,7 +85,7 @@ public class SuperLyricPush {
                 new Handler(msg -> {
                     IBinder binder = msg.getData().getBinder("reply");
                     if (binder == null) return true;
-                    consumer.accept(ISuperLyric.Stub.asInterface(iBinder));
+                    consumer.accept(ISuperLyric.Stub.asInterface(binder));
                     return true;
                 })
             );
@@ -93,7 +93,10 @@ public class SuperLyricPush {
             Messenger messenger = new Messenger(iBinder);
             Message message = Message.obtain();
             message.replyTo = clientMessenger;
-            message.obj = context.getPackageName();
+            Bundle obj = new Bundle();
+            obj.putString("super_lyric_controller_package",context.getPackageName());
+            message.setData(obj);
+            // message.obj = context.getPackageName(); // 会崩溃
             messenger.send(message);
         } catch (RemoteException e) {
             throw new RuntimeException(e);
