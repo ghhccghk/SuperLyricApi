@@ -121,22 +121,13 @@ public class SuperLyricTool {
 
     /**
      * 注册 SuperLyric 回调
+     *
+     * @param context    上下文信息
+     * @param superLyric 回调
      */
     public static void registerSuperLyric(@NonNull Context context, @NonNull ISuperLyric.Stub superLyric) {
-        registerSuperLyric(context, false, superLyric);
-    }
-
-    /**
-     * 注册 SuperLyric 回调
-     *
-     * @param context     上下文信息
-     * @param selfControl 是否自己控制歌曲是否暂停和发布 MediaMetadata 信息，否则由系统控制
-     * @param superLyric  回调
-     */
-    public static void registerSuperLyric(@NonNull Context context, boolean selfControl, @NonNull ISuperLyric.Stub superLyric) {
         Intent intent = new Intent("Super_Lyric");
         Bundle bundle = new Bundle();
-        bundle.putBoolean("super_lyric_self_control", selfControl);
         bundle.putBinder("super_lyric_binder", superLyric);
         intent.putExtras(bundle);
         context.sendBroadcast(intent);
@@ -144,34 +135,14 @@ public class SuperLyricTool {
 
     /**
      * 取消注册 SuperLyric 回调
+     *
+     * @param context    上下文信息
+     * @param superLyric 回调
      */
     public static void unregisterSuperLyric(@NonNull Context context, @NonNull ISuperLyric.Stub superLyric) {
-        unregisterSuperLyric(context, false, superLyric);
-    }
-
-    /**
-     * 取消注册 SuperLyric 回调
-     *
-     * @param context       上下文信息
-     * @param unSelfControl 是否取消由自己控制播放状态
-     * @param superLyric    回调
-     */
-    public static void unregisterSuperLyric(@NonNull Context context, boolean unSelfControl, @NonNull ISuperLyric.Stub superLyric) {
         Intent intent = new Intent("Super_Lyric");
         Bundle bundle = new Bundle();
-        bundle.putBoolean("super_lyric_un_self_control", unSelfControl);
         bundle.putBinder("super_lyric_un_binder", superLyric);
-        intent.putExtras(bundle);
-        context.sendBroadcast(intent);
-    }
-
-    /**
-     * 取消自我控制播放状态，将音乐的暂停权交给系统
-     */
-    public static void unregisterSelfControl(@NonNull Context context) {
-        Intent intent = new Intent("Super_Lyric");
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("super_lyric_un_self_control", true);
         intent.putExtras(bundle);
         context.sendBroadcast(intent);
     }

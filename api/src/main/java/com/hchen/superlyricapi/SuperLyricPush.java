@@ -58,6 +58,28 @@ public class SuperLyricPush {
     public static void onSuperLyric(@NonNull SuperLyricData data) {
     }
 
+    /**
+     * 由自己控制歌曲播放状态和发布 MediaMetadata 信息
+     */
+    public static void registerSelfControl(@NonNull Context context) {
+        Intent intent = new Intent("Super_Lyric");
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("super_lyric_self_control", true);
+        intent.putExtras(bundle);
+        context.sendBroadcast(intent);
+    }
+
+    /**
+     * 取消自我控制播放状态，将音乐的暂停权等交给系统
+     */
+    public static void unregisterSelfControl(@NonNull Context context) {
+        Intent intent = new Intent("Super_Lyric");
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("super_lyric_un_self_control", true);
+        intent.putExtras(bundle);
+        context.sendBroadcast(intent);
+    }
+
     // ------------------------- 受保护的 API 方法，正常情况请勿使用！ -------------------------------
     // ------------------------------- 非信任 APP 使用无效！---------------------------------------
 
