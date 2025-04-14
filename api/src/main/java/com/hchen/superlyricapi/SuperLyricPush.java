@@ -94,7 +94,7 @@ public class SuperLyricPush {
             Message message = Message.obtain();
             message.replyTo = clientMessenger;
             Bundle obj = new Bundle();
-            obj.putString("super_lyric_controller_package",context.getPackageName());
+            obj.putString("super_lyric_controller_package", context.getPackageName());
             message.setData(obj);
             // message.obj = context.getPackageName(); // 会崩溃
             messenger.send(message);
