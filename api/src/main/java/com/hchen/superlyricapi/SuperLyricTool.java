@@ -32,6 +32,7 @@ import android.os.Bundle;
 import android.util.Base64;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.ByteArrayOutputStream;
 
@@ -56,6 +57,7 @@ public class SuperLyricTool {
     /**
      * Base64 转 Bitmap
      */
+    @Nullable
     public static Bitmap base64ToBitmap(@NonNull String base64) {
         try {
             if (base64.isEmpty()) return null;
@@ -70,6 +72,7 @@ public class SuperLyricTool {
     /**
      * Drawable 转 Base64
      */
+    @NonNull
     public static String drawableToBase64(@NonNull Drawable drawable) {
         if (drawable instanceof AdaptiveIconDrawable adaptiveIconDrawable) {
             return adaptiveIconDrawableBase64(adaptiveIconDrawable);
@@ -86,6 +89,7 @@ public class SuperLyricTool {
     /**
      * Bitmap 转 Base64
      */
+    @NonNull
     public static String bitmapToBase64(@NonNull Bitmap bitmap) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
@@ -155,7 +159,7 @@ public class SuperLyricTool {
     public static void unregisterSuperLyric(@NonNull Context context, boolean unSelfControl, @NonNull ISuperLyric.Stub superLyric) {
         Intent intent = new Intent("Super_Lyric");
         Bundle bundle = new Bundle();
-        bundle.getBoolean("super_lyric_un_self_control", unSelfControl);
+        bundle.putBoolean("super_lyric_un_self_control", unSelfControl);
         bundle.putBinder("super_lyric_un_binder", superLyric);
         intent.putExtras(bundle);
         context.sendBroadcast(intent);
@@ -167,7 +171,7 @@ public class SuperLyricTool {
     public static void unregisterSelfControl(@NonNull Context context) {
         Intent intent = new Intent("Super_Lyric");
         Bundle bundle = new Bundle();
-        bundle.getBoolean("super_lyric_un_self_control", true);
+        bundle.putBoolean("super_lyric_un_self_control", true);
         intent.putExtras(bundle);
         context.sendBroadcast(intent);
     }
