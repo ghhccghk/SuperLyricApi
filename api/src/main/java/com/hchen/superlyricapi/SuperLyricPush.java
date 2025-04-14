@@ -65,6 +65,7 @@ public class SuperLyricPush {
         Intent intent = new Intent("Super_Lyric");
         Bundle bundle = new Bundle();
         bundle.putBoolean("super_lyric_self_control", true);
+        bundle.putString("super_lyric_self_control_package", context.getPackageName());
         intent.putExtras(bundle);
         context.sendBroadcast(intent);
     }
@@ -76,6 +77,7 @@ public class SuperLyricPush {
         Intent intent = new Intent("Super_Lyric");
         Bundle bundle = new Bundle();
         bundle.putBoolean("super_lyric_un_self_control", true);
+        bundle.putString("super_lyric_un_self_control_package", context.getPackageName());
         intent.putExtras(bundle);
         context.sendBroadcast(intent);
     }
