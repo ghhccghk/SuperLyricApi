@@ -36,7 +36,7 @@ dependencyResolutionManagement {
 }
 
 dependencies {
-    implementation 'com.github.HChenX:SuperLyricApi:1.4' // 引入依赖
+    implementation 'com.github.HChenX:SuperLyricApi:1.7' // 引入依赖
 }
 ```
 
