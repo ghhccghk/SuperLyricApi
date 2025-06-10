@@ -35,7 +35,7 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * 歌词数据
+ * 歌曲数据
  *
  * @author 焕晨HChen
  */
@@ -53,7 +53,7 @@ public class SuperLyricData implements Parcelable {
     @NonNull
     private String packageName = "";
     /**
-     * 自定义的图标
+     * 音乐软件的图标
      * <p>
      * Note：用途有限，要求传递方提供 Base64 样式的 Icon 不太现实
      * <p>
@@ -227,7 +227,7 @@ public class SuperLyricData implements Parcelable {
      *
      * @deprecated
      */
-    @Deprecated
+    @Deprecated(since = "1.8")
     public SuperLyricData setBase64BitmapBundle(@NonNull Bundle base64BitmapBundle) {
         this.base64BitmapBundle = base64BitmapBundle;
         return this;
