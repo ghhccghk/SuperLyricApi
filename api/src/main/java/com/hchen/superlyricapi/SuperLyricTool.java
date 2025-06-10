@@ -30,7 +30,6 @@ import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.VectorDrawable;
 import android.media.MediaMetadata;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 
@@ -143,27 +142,18 @@ public class SuperLyricTool {
     }
 
     @Nullable
-    static Bundle mediaMetadataBitmapToBase64(@Nullable MediaMetadata mediaMetadata) {
+    static MediaMetadata removeMediaMetadataBitmap(@Nullable MediaMetadata mediaMetadata) {
         if (mediaMetadata == null) return null;
         if (mediaMetadataBundle == null) return null;
 
         try {
-            Bundle bundle = (Bundle) mediaMetadataBundle.get(mediaMetadata);
+            MediaMetadata metadata = new MediaMetadata.Builder(mediaMetadata).build();
+            Bundle bundle = (Bundle) mediaMetadataBundle.get(metadata);
             if (bundle == null) return null;
-
-            Bundle resultBundle = new Bundle();
             for (String key : keys) {
-                Bitmap bitmap = null;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-                    bitmap = bundle.getParcelable(key, Bitmap.class);
-                else bitmap = bundle.getParcelable(key);
-
-                if (bitmap != null)
-                    resultBundle.putString(key, bitmapToBase64(bitmap));
-
                 bundle.remove(key);
             }
-            return resultBundle;
+            return metadata;
         } catch (IllegalAccessException ignore) {
         }
         return null;

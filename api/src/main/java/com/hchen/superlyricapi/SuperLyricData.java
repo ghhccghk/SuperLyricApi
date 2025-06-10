@@ -58,8 +58,6 @@ public class SuperLyricData implements Parcelable {
      * Note：用途有限，要求传递方提供 Base64 样式的 Icon 不太现实
      * <p>
      * 如果愿意你依然可以使用此方法传递 Base64 样式的 Icon
-     * <p>
-     * 本参数与 Base64BitmapBundle 参数无关
      *
      * @deprecated
      */
@@ -72,63 +70,29 @@ public class SuperLyricData implements Parcelable {
     private int delay = 0;
     /**
      * 当前歌曲的 MediaMetadata 数据
+     * <p>
+     * Note：请注意，MediaMetadata 数据内的 Bitmap 数据已被抹去
+     * <p>
+     * 因为部分设备传递 MediaMetadata 内 Bitmap 数据时会因为其大小超出 Binder 限制而导致 Binder 破裂
+     * <p>
+     * 因此 API 主动抹去 MediaMetadata 中 Bitmap 数据以规避 Binder 破裂风险
      */
     @Nullable
     private MediaMetadata mediaMetadata;
     /**
-     * 此字段用于存储 MediaMetadata 数据内的 Bitmap 参数的 Base64 版本
-     * <p>
-     * 同时 API 将会返回清除了 Bitmap 参数的 MediaMetadata 数据
-     * <p>
-     * Bundle 包含的 Key-Value 与 MediaMetadata 中对应
-     * <p>
-     * METADATA_KEY_ART、METADATA_KEY_ALBUM_ART、METADATA_KEY_DISPLAY_ICON
-     * <p>
-     * Note：部分设备传递 MediaMetadata 内 Bitmap 参数时会因为其大小超出 Binder 限制而导致 Binder 破裂
-     * <p>
-     * 因此 API 单独拆分出 MediaMetadata 中 Bitmap 数据并转为 Base64 版本以规避 Binder 破裂的问题
-     * <p>
-     * 可使用 {@link SuperLyricTool#base64ToBitmap(String)} 方法转换回 Bitmap
-     */
-    @Nullable
-    private Bundle base64BitmapBundle;
-    /**
      * 当前的播放状态
      * <p>
-     * 一般来说可以放在 stop 动作中设置
+     * 建议在 stop 动作中设置
      */
     @Nullable
     private PlaybackState playbackState;
     /**
-     * 可以自定义的附加数据
+     * 自定义的附加数据
      */
     @Nullable
     private Bundle extra;
 
     public SuperLyricData() {
-    }
-
-    protected SuperLyricData(Parcel in) {
-        lyric = Optional.ofNullable(in.readString()).orElse("");
-        packageName = Optional.ofNullable(in.readString()).orElse("");
-        base64Icon = Optional.ofNullable(in.readString()).orElse("");
-        delay = in.readInt();
-        mediaMetadata = in.readParcelable(MediaMetadata.class.getClassLoader());
-        base64BitmapBundle = in.readBundle(getClass().getClassLoader());
-        playbackState = in.readParcelable(PlaybackState.class.getClassLoader());
-        extra = in.readBundle(getClass().getClassLoader());
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(lyric);
-        dest.writeString(packageName);
-        dest.writeString(base64Icon);
-        dest.writeInt(delay);
-        dest.writeParcelable(mediaMetadata, flags);
-        dest.writeBundle(base64BitmapBundle);
-        dest.writeParcelable(playbackState, flags);
-        dest.writeBundle(extra);
     }
 
     /**
@@ -170,13 +134,6 @@ public class SuperLyricData implements Parcelable {
     }
 
     /**
-     * 是否存在 Base64BitmapBundle 数据
-     */
-    public boolean isExistBase64BitmapBundle() {
-        return Objects.nonNull(base64BitmapBundle);
-    }
-
-    /**
      * 是否存在 PlaybackState 数据
      */
     public boolean isExistPlaybackState() {
@@ -215,21 +172,7 @@ public class SuperLyricData implements Parcelable {
     }
 
     public SuperLyricData setMediaMetadata(@Nullable MediaMetadata mediaMetadata) {
-        this.base64BitmapBundle = SuperLyricTool.mediaMetadataBitmapToBase64(mediaMetadata);
-        this.mediaMetadata = mediaMetadata;
-        return this;
-    }
-
-    /**
-     * 你不需要手动设置
-     * <p>
-     * API 将会自动转换
-     *
-     * @deprecated
-     */
-    @Deprecated(since = "1.8")
-    public SuperLyricData setBase64BitmapBundle(@NonNull Bundle base64BitmapBundle) {
-        this.base64BitmapBundle = base64BitmapBundle;
+        this.mediaMetadata = SuperLyricTool.removeMediaMetadataBitmap(mediaMetadata);
         return this;
     }
 
@@ -266,11 +209,6 @@ public class SuperLyricData implements Parcelable {
     @Nullable
     public MediaMetadata getMediaMetadata() {
         return mediaMetadata;
-    }
-
-    @Nullable
-    public Bundle getBase64BitmapBundle() {
-        return base64BitmapBundle;
     }
 
     @Nullable
@@ -349,7 +287,6 @@ public class SuperLyricData implements Parcelable {
             ", base64Icon='" + base64Icon + '\'' +
             ", delay=" + delay +
             ", mediaMetadata=" + mediaMetadata +
-            ", base64BitmapBundle=" + base64BitmapBundle +
             ", playbackState=" + playbackState +
             ", extra=" + extra +
             '}';
@@ -363,19 +300,13 @@ public class SuperLyricData implements Parcelable {
             Objects.equals(packageName, data.packageName) &&
             Objects.equals(base64Icon, data.base64Icon) &&
             Objects.equals(mediaMetadata, data.mediaMetadata) &&
-            Objects.equals(base64BitmapBundle, data.base64BitmapBundle) &&
             Objects.equals(playbackState, data.playbackState) &&
             Objects.equals(extra, data.extra);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(lyric, packageName, base64Icon, delay, mediaMetadata, base64BitmapBundle, playbackState, extra);
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
+        return Objects.hash(lyric, packageName, base64Icon, delay, mediaMetadata, playbackState, extra);
     }
 
     public static final Creator<SuperLyricData> CREATOR = new Creator<SuperLyricData>() {
@@ -389,4 +320,30 @@ public class SuperLyricData implements Parcelable {
             return new SuperLyricData[size];
         }
     };
+
+    private SuperLyricData(Parcel in) {
+        lyric = Optional.ofNullable(in.readString()).orElse("");
+        packageName = Optional.ofNullable(in.readString()).orElse("");
+        base64Icon = Optional.ofNullable(in.readString()).orElse("");
+        delay = in.readInt();
+        mediaMetadata = in.readParcelable(MediaMetadata.class.getClassLoader());
+        playbackState = in.readParcelable(PlaybackState.class.getClassLoader());
+        extra = in.readBundle(getClass().getClassLoader());
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(lyric);
+        dest.writeString(packageName);
+        dest.writeString(base64Icon);
+        dest.writeInt(delay);
+        dest.writeParcelable(mediaMetadata, flags);
+        dest.writeParcelable(playbackState, flags);
+        dest.writeBundle(extra);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 }
