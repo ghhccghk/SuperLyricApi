@@ -18,6 +18,7 @@
  */
 package com.hchen.superlyricapi;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -28,6 +29,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.VectorDrawable;
+import android.media.MediaMetadata;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 
@@ -35,12 +38,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.ByteArrayOutputStream;
+import java.lang.reflect.Field;
 
 /**
  * 工具
  *
  * @author 焕晨HChen
  */
+@SuppressLint("SoonBlockedPrivateApi")
 public class SuperLyricTool {
     private SuperLyricTool() {
     }
@@ -61,7 +66,6 @@ public class SuperLyricTool {
     public static Bitmap base64ToBitmap(@NonNull String base64) {
         try {
             if (base64.isEmpty()) return null;
-
             byte[] bytes = Base64.decode(base64, Base64.DEFAULT);
             return BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
         } catch (Throwable e) {
@@ -71,6 +75,8 @@ public class SuperLyricTool {
 
     /**
      * Drawable 转 Base64
+     *
+     * @noinspection IfCanBeSwitch
      */
     @NonNull
     public static String drawableToBase64(@NonNull Drawable drawable) {
@@ -97,7 +103,8 @@ public class SuperLyricTool {
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 
-    private static String adaptiveIconDrawableBase64(AdaptiveIconDrawable drawable) {
+    @NonNull
+    private static String adaptiveIconDrawableBase64(@NonNull AdaptiveIconDrawable drawable) {
         Drawable background = drawable.getBackground();
         Drawable foreground = drawable.getForeground();
         if (background != null && foreground != null) {
@@ -111,12 +118,55 @@ public class SuperLyricTool {
         return "";
     }
 
-    private static Bitmap makeDrawableToBitmap(Drawable drawable) {
+    @NonNull
+    private static Bitmap makeDrawableToBitmap(@NonNull Drawable drawable) {
         Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
         drawable.draw(canvas);
         return bitmap;
+    }
+
+    private static Field mediaMetadataBundle;
+    private static final String[] keys = new String[]{
+        MediaMetadata.METADATA_KEY_ART,
+        MediaMetadata.METADATA_KEY_ALBUM_ART,
+        MediaMetadata.METADATA_KEY_DISPLAY_ICON
+    };
+
+    static {
+        try {
+            mediaMetadataBundle = MediaMetadata.class.getDeclaredField("mBundle");
+            mediaMetadataBundle.setAccessible(true);
+        } catch (NoSuchFieldException ignore) {
+        }
+    }
+
+    @Nullable
+    static Bundle mediaMetadataBitmapToBase64(@Nullable MediaMetadata mediaMetadata) {
+        if (mediaMetadata == null) return null;
+        if (mediaMetadataBundle == null) return null;
+
+        try {
+            Bundle bundle = (Bundle) mediaMetadataBundle.get(mediaMetadata);
+            if (bundle == null) return null;
+
+            Bundle resultBundle = new Bundle();
+            for (String key : keys) {
+                Bitmap bitmap = null;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+                    bitmap = bundle.getParcelable(key, Bitmap.class);
+                else bitmap = bundle.getParcelable(key);
+
+                if (bitmap != null)
+                    resultBundle.putString(key, bitmapToBase64(bitmap));
+
+                bundle.remove(key);
+            }
+            return resultBundle;
+        } catch (IllegalAccessException ignore) {
+        }
+        return null;
     }
 
     /**

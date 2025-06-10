@@ -38,7 +38,6 @@ import java.util.function.Consumer;
  * @author 焕晨HChen
  */
 public class SuperLyricPush {
-
     private SuperLyricPush() {
     }
 
@@ -63,10 +62,7 @@ public class SuperLyricPush {
      */
     public static void registerSelfControl(@NonNull Context context) {
         Intent intent = new Intent("Super_Lyric");
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("super_lyric_self_control", true);
-        bundle.putString("super_lyric_self_control_package", context.getPackageName());
-        intent.putExtras(bundle);
+        intent.putExtra("super_lyric_self_control_package", context.getPackageName());
         context.sendBroadcast(intent);
     }
 
@@ -75,10 +71,7 @@ public class SuperLyricPush {
      */
     public static void unregisterSelfControl(@NonNull Context context) {
         Intent intent = new Intent("Super_Lyric");
-        Bundle bundle = new Bundle();
-        bundle.putBoolean("super_lyric_un_self_control", true);
-        bundle.putString("super_lyric_un_self_control_package", context.getPackageName());
-        intent.putExtras(bundle);
+        intent.putExtra("super_lyric_un_self_control_package", context.getPackageName());
         context.sendBroadcast(intent);
     }
 
@@ -139,12 +132,10 @@ public class SuperLyricPush {
      * @param context 上下文
      * @deprecated
      */
-    @Deprecated
+    @Deprecated(since = "1.7")
     public static void unregisterSuperLyricController(@NonNull Context context) {
         Intent intent = new Intent("Super_Lyric");
-        Bundle bundle = new Bundle();
-        bundle.putString("super_lyric_un_controller", context.getPackageName());
-        intent.putExtras(bundle);
+        intent.putExtra("super_lyric_un_controller", context.getPackageName());
         context.sendBroadcast(intent);
     }
 }
