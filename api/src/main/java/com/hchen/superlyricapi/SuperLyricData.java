@@ -78,7 +78,7 @@ public class SuperLyricData implements Parcelable {
     /**
      * 此字段用于存储 MediaMetadata 数据内的 Bitmap 参数的 Base64 版本
      * <p>
-     * 同时 Api 将会返回清除了 Bitmap 参数的 MediaMetadata 数据
+     * 同时 API 将会返回清除了 Bitmap 参数的 MediaMetadata 数据
      * <p>
      * Bundle 包含的 Key-Value 与 MediaMetadata 中对应
      * <p>
@@ -86,7 +86,7 @@ public class SuperLyricData implements Parcelable {
      * <p>
      * Note：部分设备传递 MediaMetadata 内 Bitmap 参数时会因为其大小超出 Binder 限制而导致 Binder 破裂
      * <p>
-     * 因此 Api 单独拆分出 MediaMetadata 中 Bitmap 数据并转为 Base64 版本以规避 Binder 破裂的问题
+     * 因此 API 单独拆分出 MediaMetadata 中 Bitmap 数据并转为 Base64 版本以规避 Binder 破裂的问题
      * <p>
      * 可使用 {@link SuperLyricTool#base64ToBitmap(String)} 方法转换回 Bitmap
      */
@@ -223,7 +223,7 @@ public class SuperLyricData implements Parcelable {
     /**
      * 你不需要手动设置
      * <p>
-     * Api 将会自动转换
+     * API 将会自动转换
      *
      * @deprecated
      */
