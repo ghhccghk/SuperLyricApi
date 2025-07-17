@@ -65,7 +65,7 @@ public class SuperLyricData implements Parcelable {
     @Deprecated(since = "1.8")
     private String base64Icon = "";
     /**
-     * 当前歌词的持续时间 (毫秒)
+     * 每句歌词的持续时间 (毫秒)
      */
     private int delay = 0;
     /**
@@ -82,12 +82,12 @@ public class SuperLyricData implements Parcelable {
     /**
      * 当前的播放状态
      * <p>
-     * 建议在播放状态暂停时设置
+     * 建议在 stop 动作中设置
      */
     @Nullable
     private PlaybackState playbackState;
     /**
-     * 自定义附加数据
+     * 自定义的附加数据
      */
     @Nullable
     private Bundle extra;
@@ -96,14 +96,14 @@ public class SuperLyricData implements Parcelable {
     }
 
     /**
-     * 是否存在歌词数据
+     * 是否存在 Lyric 数据
      */
     public boolean isExistLyric() {
         return !lyric.isEmpty();
     }
 
     /**
-     * 是否存在包名数据
+     * 是否存在 PackageName 数据
      */
     public boolean isExistPackageName() {
         return !packageName.isEmpty();
@@ -141,7 +141,7 @@ public class SuperLyricData implements Parcelable {
     }
 
     /**
-     * 是否存在附加数据
+     * 是否存在 Extra 数据
      */
     public boolean isExistExtra() {
         return Objects.nonNull(extra);
@@ -224,7 +224,7 @@ public class SuperLyricData implements Parcelable {
     /**
      * 获取歌曲的标题，数据来自 MediaMetadata
      * <br/>
-     * 请注意，蓝牙歌词状态可能使用此参数传递歌词
+     * 请注意，可能有些软件会拿此参数传递歌词
      */
     @NonNull
     public String getTitle() {
