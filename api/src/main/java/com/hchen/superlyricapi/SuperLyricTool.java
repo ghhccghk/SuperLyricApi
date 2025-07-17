@@ -135,6 +135,7 @@ public class SuperLyricTool {
 
     static {
         try {
+            // noinspection JavaReflectionMemberAccess
             mediaMetadataBundle = MediaMetadata.class.getDeclaredField("mBundle");
             mediaMetadataBundle.setAccessible(true);
         } catch (NoSuchFieldException ignore) {
@@ -166,23 +167,23 @@ public class SuperLyricTool {
      * @param superLyric 回调
      */
     public static void registerSuperLyric(@NonNull Context context, @NonNull ISuperLyric.Stub superLyric) {
-        Intent intent = new Intent("Super_Lyric");
+        Intent intent = new Intent("super_lyric");
         Bundle bundle = new Bundle();
-        bundle.putBinder("super_lyric_binder", superLyric);
+        bundle.putBinder("super_lyric_register", superLyric);
         intent.putExtras(bundle);
         context.sendBroadcast(intent);
     }
 
     /**
-     * 取消注册 SuperLyric 回调
+     * 注销 SuperLyric 回调
      *
      * @param context    上下文信息
      * @param superLyric 回调
      */
     public static void unregisterSuperLyric(@NonNull Context context, @NonNull ISuperLyric.Stub superLyric) {
-        Intent intent = new Intent("Super_Lyric");
+        Intent intent = new Intent("super_lyric");
         Bundle bundle = new Bundle();
-        bundle.putBinder("super_lyric_un_binder", superLyric);
+        bundle.putBinder("super_lyric_unregister", superLyric);
         intent.putExtras(bundle);
         context.sendBroadcast(intent);
     }
