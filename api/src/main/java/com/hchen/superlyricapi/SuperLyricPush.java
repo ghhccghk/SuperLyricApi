@@ -44,7 +44,7 @@ public class SuperLyricPush {
     /**
      * 歌曲暂停
      * <p>
-     * 主要用于传递暂停播放的应用的包名，当然你也可以传更多参数
+     * 请务必传递包名信息，当然你也可以传递其他参数
      */
     public static void onStop(@NonNull SuperLyricData data) {
     }
@@ -52,7 +52,7 @@ public class SuperLyricPush {
     /**
      * 歌曲数据更改
      * <p>
-     * 可以发送歌词，参数等数据
+     * 请务必传递歌词和包名信息，当然你也可以传递其他参数
      */
     public static void onSuperLyric(@NonNull SuperLyricData data) {
     }
@@ -61,8 +61,8 @@ public class SuperLyricPush {
      * 由自己控制歌曲播放状态和发布 MediaMetadata 信息
      */
     public static void registerSelfControl(@NonNull Context context) {
-        Intent intent = new Intent("Super_Lyric");
-        intent.putExtra("super_lyric_self_control_package", context.getPackageName());
+        Intent intent = new Intent("super_lyric");
+        intent.putExtra("super_lyric_self_control", context.getPackageName());
         context.sendBroadcast(intent);
     }
 
@@ -70,8 +70,8 @@ public class SuperLyricPush {
      * 取消自我控制播放状态，将音乐的暂停权等交给系统
      */
     public static void unregisterSelfControl(@NonNull Context context) {
-        Intent intent = new Intent("Super_Lyric");
-        intent.putExtra("super_lyric_un_self_control_package", context.getPackageName());
+        Intent intent = new Intent("super_lyric");
+        intent.putExtra("super_lyric_un_self_control", context.getPackageName());
         context.sendBroadcast(intent);
     }
 
@@ -100,7 +100,7 @@ public class SuperLyricPush {
         try {
             final Messenger clientMessenger = new Messenger(
                 new Handler(msg -> {
-                    IBinder binder = msg.getData().getBinder("reply");
+                    IBinder binder = msg.getData().getBinder("super_lyric_reply");
                     if (binder == null) return true;
                     consumer.accept(ISuperLyric.Stub.asInterface(binder));
                     return true;
@@ -111,7 +111,7 @@ public class SuperLyricPush {
             Message message = Message.obtain();
             message.replyTo = clientMessenger;
             Bundle obj = new Bundle();
-            obj.putString("super_lyric_controller_package", context.getPackageName());
+            obj.putString("super_lyric_controller_register", context.getPackageName());
             message.setData(obj);
             // message.obj = context.getPackageName(); // 会崩溃
             messenger.send(message);
@@ -128,14 +128,16 @@ public class SuperLyricPush {
      * 因为实例会一直存在，并不会因为取消注册而消失
      * <p>
      * 更推荐您重复使用已有的控制器实例
+     * <p>
+     * Note: 已彻底废弃
      *
      * @param context 上下文
      * @deprecated
      */
     @Deprecated(since = "1.7")
     public static void unregisterSuperLyricController(@NonNull Context context) {
-        Intent intent = new Intent("Super_Lyric");
-        intent.putExtra("super_lyric_un_controller", context.getPackageName());
-        context.sendBroadcast(intent);
+        // Intent intent = new Intent("super_lyric");
+        // intent.putExtra("super_lyric_un_controller", context.getPackageName());
+        // context.sendBroadcast(intent);
     }
 }
