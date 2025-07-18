@@ -131,7 +131,7 @@ public class SuperLyricPush {
      * <p>
      * 更推荐您重复使用已有的控制器实例
      * <p>
-     * Note: 已彻底废弃
+     * Note：已彻底废弃
      *
      * @param context 上下文
      * @deprecated
