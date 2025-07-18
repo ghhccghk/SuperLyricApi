@@ -58,7 +58,9 @@ public class SuperLyricPush {
     }
 
     /**
-     * 由自己控制歌曲播放状态和发布 MediaMetadata 信息
+     * 设置由音乐软件主动发布歌曲播放状态和发布 MediaMetadata 信息
+     * <p>
+     * 否则由系统统一控制
      */
     public static void registerSelfControl(@NonNull Context context) {
         Intent intent = new Intent("super_lyric");
@@ -67,7 +69,7 @@ public class SuperLyricPush {
     }
 
     /**
-     * 取消自我控制播放状态，将音乐的暂停权等交给系统
+     * 取消由音乐软件主动发布播放状态，将由系统统一发布播放状态
      */
     public static void unregisterSelfControl(@NonNull Context context) {
         Intent intent = new Intent("super_lyric");
@@ -81,12 +83,12 @@ public class SuperLyricPush {
     /**
      * 注册歌词控制器，注册成功后返回控制器
      * <p>
-     * 使用此控制器，你可以向所有接收器发送歌词，或暂停状态
+     * 使用此控制器，你可以向所有接收器发送歌词等信息
      * <p>
      * 一个软件最多只能注册一个控制器，重复注册返回的控制器相同
      *
      * @param context  上下文
-     * @param consumer 回调 （可能永远不会被执行）
+     * @param consumer 回调，在这里获取控制器 （可能永远不会被执行）
      * @throws RuntimeException 绑定失败
      */
     public static void registerSuperLyricController(@NonNull Context context, @NonNull Consumer<ISuperLyric> consumer) {
@@ -100,7 +102,7 @@ public class SuperLyricPush {
         try {
             final Messenger clientMessenger = new Messenger(
                 new Handler(msg -> {
-                    IBinder binder = msg.getData().getBinder("super_lyric_reply");
+                    IBinder binder = msg.getData().getBinder("reply");
                     if (binder == null) return true;
                     consumer.accept(ISuperLyric.Stub.asInterface(binder));
                     return true;
