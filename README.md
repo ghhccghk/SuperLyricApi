@@ -36,7 +36,7 @@ dependencyResolutionManagement {
 }
 
 dependencies {
-    implementation 'com.github.HChenX:SuperLyricApi:2.0' // 引入依赖
+    implementation 'com.github.HChenX:SuperLyricApi:2.1' // 引入依赖
 }
 ```
 
@@ -57,19 +57,22 @@ public class Test {
         // 注册监听
         SuperLyricTool.registerSuperLyric(context, iSuperLyric = new ISuperLyric.Stub() {
             @Override
+            public void onSuperLyric(SuperLyricData data) throws RemoteException {
+                // 歌曲歌词变化或数据变化时会调用
+                data.getLyric(); // 歌词
+                data.getDelay(); // 当前歌词的持续时间 (0 值代表无效)
+                data.getPackageName(); // 发布歌词的软件
+                data.getMediaMetadata(); // 歌曲数据 (可能为 null)
+                ...
+            }
+
+            @Override
             public void onStop(SuperLyricData data) throws RemoteException {
                 // 歌曲暂停时会调用
                 // 一般会包括以下两个数据可供使用，当然具体要看发送方提供了什么
                 data.getPackageName(); // 暂停播放的软件包名
                 data.getPlaybackState(); // 播放状态
-            }
-
-            @Override
-            public void onSuperLyric(SuperLyricData data) throws RemoteException {
-                // 歌曲歌词变化或数据变化时会调用
-                data.getLyric(); // 歌词
-                data.getPackageName(); // 发送歌词的软件
-                data.getMediaMetadata(); // 歌曲数据 可能为 null
+                ...
             }
         });
 
@@ -98,20 +101,23 @@ public class Test {
 
         SuperLyricPush.onSuperLyric(
             new SuperLyricData()
-                .setLyric() // 设置歌词
-                .setPackageName() // 设置本软件包名
-                .setMediaMetadata() // 设置歌曲数据
+                .setLyric() // 设置歌词 (必选)
+                .setPackageName() // 设置软件包名 (必选)
                 .setDelay() // 设置当前歌词持续时间
-                .setExtra(new Bundle()) // 设置其他附加数据
+                .setMediaMetadata() // 设置歌曲数据
                 .setPlaybackState() // 设置播放状态
-        ); // 发送歌词
+                .setExtra(new Bundle()) // 设置其他附加数据
+                ...
+        ); // 发布歌词
 
         SuperLyricPush.onStop(
             new SuperLyricData()
-                .setPackageName() // 设置歌词
+                .setPackageName() // 设置软件包名 (必选)
+                .setMediaMetadata() // 设置歌曲数据
                 .setPlaybackState() // 设置播放状态
-                .setExtra() // 设置其他附加数据
-        ); // 状态暂停
+                .setExtra(new Bundle()) // 设置其他附加数据
+                ...
+        ); // 发布歌曲暂停
 
         // 其他 API 请参考源码注释
     }
