@@ -1,20 +1,20 @@
 /*
  * This file is part of SuperLyricApi.
-
+ *
  * SuperLyricApi is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as
- * published by the Free Software Foundation, either version 3 of the
- * License.
-
- * This program is distributed in the hope that it will be useful,
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation; either version 2.1 of the License, or
+ * (at your option) any later version.
+ *
+ * SuperLyricApi is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
-
- * You should have received a copy of the GNU General Public License
- * along with this program. If not, see <https://www.gnu.org/licenses/>.
-
- * Copyright (C) 2023-2025 HChenX
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with SuperLyricApi. If not, see <https://www.gnu.org/licenses/lgpl-2.1>.
+ *
+ * Copyright (C) 2023–2025 HChenX
  */
 package com.hchen.superlyricapi;
 
@@ -48,7 +48,7 @@ public class SuperLyricData implements Parcelable {
     /**
      * 音乐软件的包名
      * <p>
-     * 非常建议您设置包名，这是判断当前播放应用的唯一途径
+     * 请务必设置包名，这是判断当前播放应用的唯一途径
      */
     @NonNull
     private String packageName = "";
@@ -117,7 +117,7 @@ public class SuperLyricData implements Parcelable {
     }
 
     /**
-     * 是否存在 base64Icon 数据
+     * 是否存在 Base64 Icon 数据
      *
      * @deprecated
      */
@@ -310,18 +310,20 @@ public class SuperLyricData implements Parcelable {
     }
 
     public static final Creator<SuperLyricData> CREATOR = new Creator<SuperLyricData>() {
+        @NonNull
         @Override
         public SuperLyricData createFromParcel(Parcel in) {
             return new SuperLyricData(in);
         }
 
+        @NonNull
         @Override
         public SuperLyricData[] newArray(int size) {
             return new SuperLyricData[size];
         }
     };
 
-    private SuperLyricData(Parcel in) {
+    private SuperLyricData(@NonNull Parcel in) {
         lyric = Optional.ofNullable(in.readString()).orElse("");
         packageName = Optional.ofNullable(in.readString()).orElse("");
         base64Icon = Optional.ofNullable(in.readString()).orElse("");
@@ -332,7 +334,7 @@ public class SuperLyricData implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags) {
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(lyric);
         dest.writeString(packageName);
         dest.writeString(base64Icon);
