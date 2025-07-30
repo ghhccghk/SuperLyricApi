@@ -36,7 +36,7 @@ dependencyResolutionManagement {
 }
 
 dependencies {
-    implementation 'com.github.HChenX:SuperLyricApi:2.2' // 引入依赖
+    implementation 'com.github.HChenX:SuperLyricApi:2.3' // 引入依赖
 }
 ```
 
@@ -60,6 +60,7 @@ public class Test {
             public void onSuperLyric(SuperLyricData data) throws RemoteException {
                 // 歌曲歌词变化或数据变化时会调用
                 data.getLyric(); // 歌词
+                data.getTranslation(); // 歌词的翻译
                 data.getDelay(); // 当前歌词的持续时间 (0 值代表无效)
                 data.getPackageName(); // 发布歌词的软件
                 data.getMediaMetadata(); // 歌曲数据 (可能为 null)
@@ -102,6 +103,7 @@ public class Test {
         SuperLyricPush.onSuperLyric(
             new SuperLyricData()
                 .setLyric() // 设置歌词 (必选)
+                .setTranslation() // 当前歌词的翻译 (可选)
                 .setPackageName() // 设置软件包名 (必选)
                 .setDelay() // 设置当前歌词持续时间
                 .setMediaMetadata() // 设置歌曲数据
