@@ -64,6 +64,7 @@ public class Test {
                 data.getDelay(); // 当前歌词的持续时间 (0 值代表无效)
                 data.getPackageName(); // 发布歌词的软件
                 data.getMediaMetadata(); // 歌曲数据 (可能为 null)
+                data.getEnhancedLRCData(); // 逐字歌词数据
                 ...
             }
 
@@ -105,10 +106,13 @@ public class Test {
                 .setLyric() // 设置歌词 (必选)
                 .setTranslation() // 当前歌词的翻译 (可选)
                 .setPackageName() // 设置软件包名 (必选)
-                .setDelay() // 设置当前歌词持续时间
-                .setMediaMetadata() // 设置歌曲数据
-                .setPlaybackState() // 设置播放状态
-                .setExtra(new Bundle()) // 设置其他附加数据
+                .setDelay() // 设置当前歌词持续时间 (可选)
+                .setMediaMetadata() // 设置歌曲数据 (可选)
+                .setPlaybackState() // 设置播放状态 (可选)
+                .setExtra(new Bundle()) // 设置其他附加数据 (可选)
+                .setEnhancedLRCData(new SuperLyricData.EnhancedLRCData[]{
+                    new SuperLyricData.EnhancedLRCData("Test Word", 100)
+                }) // 逐字歌词数据 (可选)
                 ...
         ); // 发布歌词
 
