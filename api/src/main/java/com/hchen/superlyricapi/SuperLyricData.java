@@ -24,6 +24,7 @@ import static android.media.MediaMetadata.METADATA_KEY_TITLE;
 
 import android.media.MediaMetadata;
 import android.media.session.PlaybackState;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -45,13 +46,6 @@ public class SuperLyricData implements Parcelable {
      */
     @NonNull
     private String lyric = "";
-    /**
-     * 翻译
-     * <p>
-     * 您可以使用此字段传递当前歌词的翻译
-     */
-    @NonNull
-    private String translation = "";
     /**
      * 音乐软件的包名
      * <p>
@@ -98,6 +92,18 @@ public class SuperLyricData implements Parcelable {
      */
     @Nullable
     private Bundle extra;
+    /**
+     * Extra 包中用于存储歌词翻译数据的 Key 值
+     * <p>
+     * 我们将使用此 Key 存储歌词翻译数据
+     */
+    private static final String KEY_TRANSLATION = "key_translation";
+    /**
+     * Extra 包中用于存储逐字歌词数据的 Key 值
+     * <p>
+     * 我们将使用此 Key 存储逐字歌词数据
+     */
+    private static final String KEY_ENHANCED_LRC_DATA = "key_enhanced_lrc_data";
 
     public SuperLyricData() {
     }
@@ -113,7 +119,14 @@ public class SuperLyricData implements Parcelable {
      * 是否存在翻译数据
      */
     public boolean isExistTranslation() {
-        return !translation.isEmpty();
+        return extra != null && extra.containsKey(KEY_TRANSLATION);
+    }
+
+    /**
+     * 是否存在逐字歌词数据
+     */
+    public boolean isExistEnhancedLRCData() {
+        return extra != null && extra.containsKey(KEY_ENHANCED_LRC_DATA);
     }
 
     /**
@@ -168,8 +181,18 @@ public class SuperLyricData implements Parcelable {
     }
 
     public SuperLyricData setTranslation(@NonNull String translation) {
-        if (Objects.isNull(translation)) translation = "";
-        this.translation = translation;
+        if (Objects.nonNull(translation)) {
+            if (this.extra == null) this.extra = new Bundle();
+            this.extra.putString(KEY_TRANSLATION, translation);
+        }
+        return this;
+    }
+
+    public SuperLyricData setEnhancedLRCData(@NonNull EnhancedLRCData[] data) {
+        if (Objects.nonNull(data)) {
+            if (this.extra == null) this.extra = new Bundle();
+            this.extra.putParcelableArray(KEY_ENHANCED_LRC_DATA, data);
+        }
         return this;
     }
 
@@ -191,18 +214,19 @@ public class SuperLyricData implements Parcelable {
         return this;
     }
 
-    public SuperLyricData setMediaMetadata(@Nullable MediaMetadata mediaMetadata) {
+    public SuperLyricData setMediaMetadata(@NonNull MediaMetadata mediaMetadata) {
         this.mediaMetadata = SuperLyricTool.removeMediaMetadataBitmap(mediaMetadata);
         return this;
     }
 
-    public SuperLyricData setPlaybackState(@Nullable PlaybackState playbackState) {
+    public SuperLyricData setPlaybackState(@NonNull PlaybackState playbackState) {
         this.playbackState = playbackState;
         return this;
     }
 
-    public SuperLyricData setExtra(@Nullable Bundle extra) {
-        this.extra = extra;
+    public SuperLyricData setExtra(@NonNull Bundle extra) {
+        if (this.extra == null) this.extra = extra;
+        else this.extra.putAll(extra);
         return this;
     }
 
@@ -211,9 +235,18 @@ public class SuperLyricData implements Parcelable {
         return lyric;
     }
 
-    @NonNull
+    @Nullable
     public String getTranslation() {
-        return translation;
+        return extra != null ? extra.getString(KEY_TRANSLATION) : null;
+    }
+
+    @Nullable
+    public EnhancedLRCData[] getEnhancedLRCData() {
+        if (extra == null) return null;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            return extra.getParcelableArray(KEY_ENHANCED_LRC_DATA, EnhancedLRCData.class);
+        else return (EnhancedLRCData[]) extra.getParcelableArray(KEY_ENHANCED_LRC_DATA);
     }
 
     @NonNull
@@ -308,7 +341,6 @@ public class SuperLyricData implements Parcelable {
     public String toString() {
         return "SuperLyricData{" +
             "lyric='" + lyric + '\'' +
-            ", translation='" + translation + '\'' +
             ", packageName='" + packageName + '\'' +
             ", base64Icon='" + base64Icon + '\'' +
             ", delay=" + delay +
@@ -323,7 +355,6 @@ public class SuperLyricData implements Parcelable {
         if (!(o instanceof SuperLyricData data)) return false;
         return delay == data.delay &&
             Objects.equals(lyric, data.lyric) &&
-            Objects.equals(translation, data.translation) &&
             Objects.equals(packageName, data.packageName) &&
             Objects.equals(base64Icon, data.base64Icon) &&
             Objects.equals(mediaMetadata, data.mediaMetadata) &&
@@ -333,7 +364,7 @@ public class SuperLyricData implements Parcelable {
 
     @Override
     public int hashCode() {
-        return Objects.hash(lyric, translation, packageName, base64Icon, delay, mediaMetadata, playbackState, extra);
+        return Objects.hash(lyric, packageName, base64Icon, delay, mediaMetadata, playbackState, extra);
     }
 
     public static final Creator<SuperLyricData> CREATOR = new Creator<SuperLyricData>() {
@@ -352,7 +383,6 @@ public class SuperLyricData implements Parcelable {
 
     private SuperLyricData(@NonNull Parcel in) {
         lyric = Optional.ofNullable(in.readString()).orElse("");
-        translation = Optional.ofNullable(in.readString()).orElse("");
         packageName = Optional.ofNullable(in.readString()).orElse("");
         base64Icon = Optional.ofNullable(in.readString()).orElse("");
         delay = in.readInt();
@@ -364,7 +394,6 @@ public class SuperLyricData implements Parcelable {
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
         dest.writeString(lyric);
-        dest.writeString(translation);
         dest.writeString(packageName);
         dest.writeString(base64Icon);
         dest.writeInt(delay);
@@ -376,5 +405,91 @@ public class SuperLyricData implements Parcelable {
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    /**
+     * 逐字歌词数据信息
+     * <p>
+     * 我们将通过此数据包实现对逐字歌词的支持
+     */
+    public static class EnhancedLRCData implements Parcelable {
+        /**
+         * 单词
+         * <p>
+         * 我们将使用此字段传递当前歌词的某个单词数据
+         */
+        @NonNull
+        private String word = "";
+        /**
+         * 持续时间 (毫秒)
+         * <p>
+         * 当前单词的持续时间
+         */
+        private int delay = 0;
+
+        public EnhancedLRCData(@NonNull String word, int delay) {
+            if (Objects.isNull(word)) word = "";
+            this.word = word;
+            this.delay = delay;
+        }
+
+        @NonNull
+        public String getWord() {
+            return word;
+        }
+
+        public int getDelay() {
+            return delay;
+        }
+
+        @NonNull
+        @Override
+        public String toString() {
+            return "EnhancedLRCData{" +
+                "word='" + word + '\'' +
+                ", delay=" + delay +
+                '}';
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (!(o instanceof EnhancedLRCData that)) return false;
+            return delay == that.delay && Objects.equals(word, that.word);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(word, delay);
+        }
+
+        public static final Creator<EnhancedLRCData> CREATOR = new Creator<EnhancedLRCData>() {
+            @NonNull
+            @Override
+            public EnhancedLRCData createFromParcel(Parcel in) {
+                return new EnhancedLRCData(in);
+            }
+
+            @NonNull
+            @Override
+            public EnhancedLRCData[] newArray(int size) {
+                return new EnhancedLRCData[size];
+            }
+        };
+
+        private EnhancedLRCData(@NonNull Parcel in) {
+            word = Optional.ofNullable(in.readString()).orElse("");
+            delay = in.readInt();
+        }
+
+        @Override
+        public void writeToParcel(@NonNull Parcel dest, int flags) {
+            dest.writeString(word);
+            dest.writeInt(delay);
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
     }
 }
