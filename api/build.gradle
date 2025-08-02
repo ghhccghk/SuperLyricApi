@@ -13,6 +13,8 @@ android {
     defaultConfig {
         minSdk 26
         targetSdk 35
+        versionCode defVersionCode
+        versionName defVersionName
 
         aarMetadata {
             minCompileSdk = 26
@@ -84,31 +86,8 @@ afterEvaluate {
                 groupId = 'com.github.HChenX'
                 artifactId = 'SuperLyricApi'
                 version = defVersionName
-                pom {
-                    name.set("HChenX/SuperLyricApi")
-                    description.set("Super Lyric API")
-                    url.set("https://github.com/HChenX/SuperLyricApi")
 
-                    licenses {
-                        license {
-                            name.set("GNU Lesser General Public License v2.1")
-                            url.set("https://www.gnu.org/licenses/old-licenses/lgpl-2.1.html")
-                        }
-                    }
-
-                    developers {
-                        developer {
-                            id.set("HChenX")
-                            name.set("焕晨HChen")
-                        }
-                    }
-
-                    scm {
-                        connection.set("scm:git://github.com/HChenX/SuperLyricApi.git")
-                        developerConnection.set("scm:git://github.com/HChenX/SuperLyricApi.git")
-                        url.set("https://github.com/HChenX/SuperLyricApi")
-                    }
-                }
+                artifact androidSourcesJar
             }
         }
     }
