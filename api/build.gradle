@@ -13,8 +13,6 @@ android {
     defaultConfig {
         minSdk 26
         targetSdk 35
-        versionCode defVersionCode
-        versionName defVersionName
 
         aarMetadata {
             minCompileSdk = 26
@@ -86,8 +84,6 @@ afterEvaluate {
                 groupId = 'com.github.HChenX'
                 artifactId = 'SuperLyricApi'
                 version = defVersionName
-                artifact androidSourcesJar
-
                 pom {
                     name.set("HChenX/SuperLyricApi")
                     description.set("Super Lyric API")
