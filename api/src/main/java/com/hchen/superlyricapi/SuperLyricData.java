@@ -201,7 +201,10 @@ public class SuperLyricData implements Parcelable {
         }
         return this;
     }
-
+    /**
+     * 设置对唱数据
+     * @param duet 是否对唱
+     */
     public SuperLyricData setDuet(@NonNull Boolean duet) {
         if (Objects.nonNull(duet)) {
             if (this.extra == null) this.extra = new Bundle();
@@ -261,7 +264,10 @@ public class SuperLyricData implements Parcelable {
     public String getTranslation() {
         return extra != null ? extra.getString(KEY_TRANSLATION) : null;
     }
-
+    /**
+     * 获取对唱数据
+     * @return {@link Boolean}  false 表示左，true 表示右边
+     */
     @Nullable
     public Boolean getDute() {
         return extra != null ? extra.getBoolean(KEY_DUTE,false) : null;
