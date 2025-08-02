@@ -105,6 +105,13 @@ public class SuperLyricData implements Parcelable {
      */
     private static final String KEY_ENHANCED_LRC_DATA = "key_enhanced_lrc_data";
 
+    /**
+     * Extra 包中用于存储对唱歌词位置数据的 Key 值
+     * <p>
+     * 我们将使用此 Key 存储对唱歌词位置数据
+     */
+    private static final String KEY_DUTE = "key_duet";
+
     public SuperLyricData() {
     }
 
@@ -127,6 +134,13 @@ public class SuperLyricData implements Parcelable {
      */
     public boolean isExistEnhancedLRCData() {
         return extra != null && extra.containsKey(KEY_ENHANCED_LRC_DATA);
+    }
+
+    /**
+     * 是否存在对唱歌词位置数据
+     */
+    public boolean isExistDute() {
+        return extra != null && extra.containsKey(KEY_DUTE);
     }
 
     /**
@@ -188,6 +202,14 @@ public class SuperLyricData implements Parcelable {
         return this;
     }
 
+    public SuperLyricData setDuet(@NonNull Boolean duet) {
+        if (Objects.nonNull(duet)) {
+            if (this.extra == null) this.extra = new Bundle();
+            this.extra.putBoolean(KEY_DUTE, duet);
+        }
+        return this;
+    }
+
     public SuperLyricData setEnhancedLRCData(@NonNull EnhancedLRCData[] data) {
         if (Objects.nonNull(data)) {
             if (this.extra == null) this.extra = new Bundle();
@@ -241,6 +263,11 @@ public class SuperLyricData implements Parcelable {
     }
 
     @Nullable
+    public Boolean getDute() {
+        return extra != null ? extra.getBoolean(KEY_DUTE,false) : null;
+    }
+
+    @Nullable
     public EnhancedLRCData[] getEnhancedLRCData() {
         if (extra == null) return null;
 
@@ -289,7 +316,7 @@ public class SuperLyricData implements Parcelable {
         if (mediaMetadata == null) return "Unknown";
 
         return Optional.ofNullable(
-            mediaMetadata.getString(METADATA_KEY_TITLE)
+                mediaMetadata.getString(METADATA_KEY_TITLE)
         ).orElse("Unknown");
     }
 
@@ -301,7 +328,7 @@ public class SuperLyricData implements Parcelable {
         if (mediaMetadata == null) return "Unknown";
 
         return Optional.ofNullable(
-            mediaMetadata.getString(METADATA_KEY_ARTIST)
+                mediaMetadata.getString(METADATA_KEY_ARTIST)
         ).orElse("Unknown");
     }
 
@@ -313,7 +340,7 @@ public class SuperLyricData implements Parcelable {
         if (mediaMetadata == null) return "Unknown";
 
         return Optional.ofNullable(
-            mediaMetadata.getString(METADATA_KEY_ALBUM)
+                mediaMetadata.getString(METADATA_KEY_ALBUM)
         ).orElse("Unknown");
     }
 
@@ -340,26 +367,26 @@ public class SuperLyricData implements Parcelable {
     @Override
     public String toString() {
         return "SuperLyricData{" +
-            "lyric='" + lyric + '\'' +
-            ", packageName='" + packageName + '\'' +
-            ", base64Icon='" + base64Icon + '\'' +
-            ", delay=" + delay +
-            ", mediaMetadata=" + mediaMetadata +
-            ", playbackState=" + playbackState +
-            ", extra=" + extra +
-            '}';
+                "lyric='" + lyric + '\'' +
+                ", packageName='" + packageName + '\'' +
+                ", base64Icon='" + base64Icon + '\'' +
+                ", delay=" + delay +
+                ", mediaMetadata=" + mediaMetadata +
+                ", playbackState=" + playbackState +
+                ", extra=" + extra +
+                '}';
     }
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof SuperLyricData data)) return false;
         return delay == data.delay &&
-            Objects.equals(lyric, data.lyric) &&
-            Objects.equals(packageName, data.packageName) &&
-            Objects.equals(base64Icon, data.base64Icon) &&
-            Objects.equals(mediaMetadata, data.mediaMetadata) &&
-            Objects.equals(playbackState, data.playbackState) &&
-            Objects.equals(extra, data.extra);
+                Objects.equals(lyric, data.lyric) &&
+                Objects.equals(packageName, data.packageName) &&
+                Objects.equals(base64Icon, data.base64Icon) &&
+                Objects.equals(mediaMetadata, data.mediaMetadata) &&
+                Objects.equals(playbackState, data.playbackState) &&
+                Objects.equals(extra, data.extra);
     }
 
     @Override
@@ -446,9 +473,9 @@ public class SuperLyricData implements Parcelable {
         @Override
         public String toString() {
             return "EnhancedLRCData{" +
-                "word='" + word + '\'' +
-                ", delay=" + delay +
-                '}';
+                    "word='" + word + '\'' +
+                    ", delay=" + delay +
+                    '}';
         }
 
         @Override
